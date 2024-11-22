@@ -85,26 +85,29 @@ export async function subscribeToNewsletter(prevState: State | null, formData: F
 }
 
 export async function sendContactForm(prevState: State | null, formData: FormData): Promise<State> {
-  const validatedFields = contactSchema.safeParse({
-    name: formData.get('name'),
-    email: formData.get('email'),
-    phone: formData.get('phone'),
-    church: formData.get('church'),
-    message: formData.get('message'),
-    interest: formData.get('interest'),
-    preferred_contact: formData.get('preferred_contact'),
-    source: formData.get('source'),
-  })
-
-  if (!validatedFields.success) {
-    return {
-      error: 'Please check your input and try again.',
-    }
-  }
-
-  const { name, email, phone, church, message, interest, preferred_contact, source } = validatedFields.data
-
   try {
+    console.log('Validating form data...')
+    const validatedFields = contactSchema.safeParse({
+      name: formData.get('name'),
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      church: formData.get('church'),
+      message: formData.get('message'),
+      interest: formData.get('interest'),
+      preferred_contact: formData.get('preferred_contact'),
+      source: formData.get('source'),
+    })
+
+    if (!validatedFields.success) {
+      console.error('Validation error:', validatedFields.error.flatten())
+      return {
+        error: 'Please check your input and try again.',
+      }
+    }
+
+    const { name, email, phone, church, message, interest, preferred_contact, source } = validatedFields.data
+
+    console.log('Inserting into Supabase...')
     // Insert into Supabase
     const { error: supabaseError } = await supabase
       .from('lead_submissions')
@@ -126,9 +129,13 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
         }
       ])
 
-    if (supabaseError) throw supabaseError
+    if (supabaseError) {
+      console.error('Supabase error:', supabaseError)
+      throw supabaseError
+    }
 
-    // Send notification email with enhanced information
+    console.log('Sending notification email...')
+    // Send notification email
     await resend.emails.send({
       from: 'Tiny Church <hello@tinychurch.app>',
       to: 'hello@tinychurch.app',
@@ -148,6 +155,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
       replyTo: email,
     })
 
+    console.log('Form submission successful')
     return {
       success: "Thanks for reaching out! We'll get back to you soon.",
     }

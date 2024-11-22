@@ -24,14 +24,55 @@ type State = {
   success?: string
 }
 
-// Create a separate component for the form content
-function ContactFormContent() {
+function LeadFormContent() {
   const initialState: State = { error: undefined, success: undefined }
   const [state, formAction] = useActionState(sendContactForm, initialState)
   const formRef = useRef<HTMLFormElement>(null)
   const { toast } = useToast()
   const searchParams = useSearchParams()
   const pathname = usePathname()
+
+  const handleSubmit = async (formData: FormData) => {
+    try {
+      // Add source path
+      formData.append('source', pathname)
+      
+      // Add UTM parameters
+      const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+      utmParams.forEach(param => {
+        const value = searchParams.get(param)
+        if (value) {
+          formData.append(param, value)
+        }
+      })
+
+      // Log form data for debugging
+      console.log('Form submission attempt:', {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        church: formData.get('church'),
+        message: formData.get('message'),
+        interest: formData.get('interest'),
+        preferred_contact: formData.get('preferred_contact'),
+        source: formData.get('source'),
+        utm_params: Object.fromEntries(
+          utmParams
+            .filter(param => formData.get(param))
+            .map(param => [param, formData.get(param)])
+        )
+      })
+      
+      return formAction(formData)
+    } catch (error) {
+      console.error('Error in form submission:', error)
+      toast({
+        title: "Error",
+        description: "Failed to submit form. Please try again.",
+        variant: "destructive",
+      })
+    }
+  }
 
   useEffect(() => {
     if (state?.success) {
@@ -41,12 +82,17 @@ function ContactFormContent() {
       })
       const email = formRef.current?.email?.value
       if (email) {
-        trackEvent('contact_form_submit', {
-          email_domain: email.split('@')[1],
-        })
+        try {
+          trackEvent('contact_form_submit', {
+            email_domain: email.split('@')[1],
+          })
+        } catch (error) {
+          console.error('Error tracking form submission:', error)
+        }
       }
       formRef.current?.reset()
     } else if (state?.error) {
+      console.error('Form submission error:', state.error)
       toast({
         title: "Error",
         description: state.error,
@@ -54,22 +100,6 @@ function ContactFormContent() {
       })
     }
   }, [state, toast])
-
-  const handleSubmit = (formData: FormData) => {
-    // Add source path
-    formData.append('source', pathname)
-    
-    // Add UTM parameters
-    const utmParams = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
-    utmParams.forEach(param => {
-      const value = searchParams.get(param)
-      if (value) {
-        formData.append(param, value)
-      }
-    })
-    
-    return formAction(formData)
-  }
 
   return (
     <form ref={formRef} action={handleSubmit} className="space-y-6">
@@ -159,8 +189,7 @@ function ContactFormContent() {
   )
 }
 
-// Main component with Suspense boundary
-export function ContactForm() {
+export function LeadForm() {
   return (
     <section id="contact" className="section-padding bg-secondary/30">
       <div className="container px-4 sm:px-6 lg:px-8">
@@ -175,7 +204,7 @@ export function ContactForm() {
 
         <div className="mx-auto mt-8 sm:mt-12 md:mt-16 max-w-xl">
           <Suspense fallback={<div>Loading...</div>}>
-            <ContactFormContent />
+            <LeadFormContent />
           </Suspense>
         </div>
       </div>
