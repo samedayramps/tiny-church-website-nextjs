@@ -1,11 +1,11 @@
 import { Navbar } from '@/components/navbar'
-import { Hero } from '@/components/hero'
-import { Features } from '@/components/features'
-import { FocusSection } from '@/components/focus-section'
-import { LeadForm } from '@/components/contact-form'
+import { Hero } from '@/components/landing1/hero'
+import { Features } from '@/components/landing1/features'
+import { FocusSection } from '@/components/landing1/focus-section'
+import { CTA } from '@/components/landing1/cta'
 import { Footer } from '@/components/footer'
 
-export default function Home() {
+export default function Landing1() {
   return (
     <div className="flex min-h-screen flex-col">
       <Navbar />
@@ -13,7 +13,7 @@ export default function Home() {
         <Hero />
         <FocusSection />
         <Features />
-        <LeadForm />
+        <CTA />
       </main>
       <Footer />
     </div>

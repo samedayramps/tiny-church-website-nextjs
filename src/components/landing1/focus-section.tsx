@@ -36,7 +36,7 @@ export function FocusSection() {
                 Focus on Your Community
               </h2>
               <p className="text-lg text-muted-foreground">
-                Stop spending time managing technology. We&apos;ll handle your digital presence so you can invest in what matters most - your people and your mission.
+              Stop wrestling with digital tools and start investing in what truly matters - your people, your mission, and your community.
               </p>
             </div>
             

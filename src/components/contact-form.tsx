@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingButton } from '@/components/ui/loading-button'
 import { useToast } from "@/hooks/use-toast"
-import { useEffect, useRef, Suspense } from 'react'
+import { useEffect, useRef } from 'react'
 import { sendContactForm } from '@/app/actions'
 import { trackEvent } from '@/lib/gtm'
 import { useSearchParams, usePathname } from 'next/navigation'
@@ -24,7 +24,7 @@ type State = {
   success?: string
 }
 
-function LeadFormContent() {
+export function ContactForm() {
   const initialState: State = { error: undefined, success: undefined }
   const [state, formAction] = useActionState(sendContactForm, initialState)
   const formRef = useRef<HTMLFormElement>(null)
@@ -186,28 +186,5 @@ function LeadFormContent() {
         </LoadingButton>
       </div>
     </form>
-  )
-}
-
-export function LeadForm() {
-  return (
-    <section id="contact" className="section-padding bg-secondary/30">
-      <div className="container px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[58rem] text-center space-y-4">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
-            Ready to Simplify Your Church Tech?
-          </h2>
-          <p className="text-base sm:text-lg text-muted-foreground">
-            Let&apos;s discuss how Tiny Church can serve your congregation. Share your details below, and we&apos;ll reach out to learn more about your needs.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-8 sm:mt-12 md:mt-16 max-w-xl">
-          <Suspense fallback={<div>Loading...</div>}>
-            <LeadFormContent />
-          </Suspense>
-        </div>
-      </div>
-    </section>
   )
 } 

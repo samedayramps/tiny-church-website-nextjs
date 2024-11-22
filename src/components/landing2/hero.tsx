@@ -1,10 +1,10 @@
 'use client'
 
-import { Input } from './ui/input'
+import { Input } from '../ui/input'
 import { useActionState } from 'react'
 import { subscribeToNewsletter } from '@/app/actions'
 import { useEffect, useRef } from 'react'
-import { LoadingButton } from './ui/loading-button'
+import { LoadingButton } from '../ui/loading-button'
 import { useToast } from "@/hooks/use-toast"
 import { trackSubscribe } from '@/lib/gtm'
 
@@ -13,7 +13,7 @@ type State = {
   success?: string
 }
 
-export function Hero() {
+export function Hero2() {
   const initialState: State = { error: undefined, success: undefined }
   const [state, formAction] = useActionState(subscribeToNewsletter, initialState)
   const formRef = useRef<HTMLFormElement>(null)
@@ -44,10 +44,10 @@ export function Hero() {
     <section className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center gap-6 px-4 py-12 md:gap-8 md:py-16 lg:py-32">
       <div className="mx-auto flex flex-col items-center gap-4 md:gap-6">
         <h1 className="text-3xl font-bold tracking-tight text-center sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-          Nurture Community,<br />Not Technology
+        Focus on your calling,<br />not technology.
         </h1>
         <p className="max-w-[42rem] text-center leading-normal text-muted-foreground text-base sm:text-lg md:text-xl md:leading-8">
-          Coming soon: A simple platform that lets you focus on what matters most - building authentic relationships and fostering meaningful connections in your congregation.
+        We provide small churches with a simple, all-in-one platform that handles their complete digital presence, so pastors can focus on ministry instead of managing technology.
         </p>
       </div>
 
