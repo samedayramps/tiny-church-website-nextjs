@@ -25,7 +25,7 @@ const solutions = [
     title: "Community Growth",
     icon: Megaphone,
     features: [
-      "Google Business integration",
+      "Google Maps integration",
       "Social media automation",
       "Visitor follow-up tools",
       "Community outreach features"
