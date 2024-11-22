@@ -1130,3 +1130,22 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export type LeadSubmission = {
+  id: string // UUID
+  name: string
+  email: string
+  phone?: string
+  church?: string
+  message: string
+  interest?: string
+  source: string
+  utm_source?: string
+  utm_medium?: string
+  utm_campaign?: string
+  utm_term?: string
+  utm_content?: string
+  status: 'new' | 'contacted' | 'qualified' | 'closed'
+  created_at: string // Timestamp
+  updated_at: string // Timestamp
+}

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from './ui/button'
 import { Menu } from 'lucide-react'
 
@@ -16,8 +17,15 @@ export function Navbar() {
         <div className="flex-1">
           <Link 
             href="/" 
-            className="text-xl font-semibold tracking-tight sm:text-2xl"
+            className="flex items-center gap-2 text-xl font-semibold tracking-tight sm:text-2xl"
           >
+            <Image
+              src="/logo.svg"
+              alt="Tiny Church Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
             Tiny Church
           </Link>
         </div>
