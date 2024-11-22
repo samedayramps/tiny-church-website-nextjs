@@ -5,14 +5,20 @@ import { supabase } from '@/lib/supabase'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+type SearchParams = Promise<{ 
+  email?: string 
+}>
+
 export default async function UnsubscribePage({
   searchParams,
 }: {
-  searchParams: { email?: string }
+  searchParams: SearchParams
 }) {
   let message = "You've been unsubscribed."
   
-  if (searchParams.email) {
+  const params = await searchParams
+  
+  if (params.email) {
     try {
       // Update Supabase record
       const { error: supabaseError } = await supabase
@@ -21,14 +27,14 @@ export default async function UnsubscribePage({
           unsubscribed: true,
           unsubscribed_at: new Date().toISOString()
         })
-        .eq('email', searchParams.email)
+        .eq('email', params.email)
 
       if (supabaseError) throw supabaseError
 
       // Remove from Resend audience
       await resend.contacts.remove({
         audienceId: '589aac68-2790-486e-bb58-20218cf66f5e',
-        email: searchParams.email,
+        email: params.email,
       })
     } catch (error) {
       console.error('Failed to unsubscribe:', error)
