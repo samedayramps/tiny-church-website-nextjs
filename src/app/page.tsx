@@ -2,6 +2,7 @@ import { Navbar } from '@/components/navbar'
 import { Hero } from '@/components/hero'
 import { Features } from '@/components/features'
 import { FocusSection } from '@/components/focus-section'
+import { ContactForm } from '@/components/contact-form'
 import { Footer } from '@/components/footer'
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
         <Hero />
         <FocusSection />
         <Features />
+        <ContactForm />
       </main>
       <Footer />
     </div>

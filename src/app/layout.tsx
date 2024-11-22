@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
 import { GoogleTagManager } from '@next/third-parties/google'
+import { cn } from '@/lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,8 +18,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+      </head>
+      <body className={cn(
+        inter.className,
+        "min-h-screen bg-background font-sans antialiased"
+      )}>
         {children}
         <Toaster />
         <GoogleTagManager gtmId="GTM-KRJZCW2W" />

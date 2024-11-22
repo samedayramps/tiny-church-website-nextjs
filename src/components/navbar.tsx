@@ -40,7 +40,7 @@ export function Navbar() {
         {/* Right side - Actions */}
         <div className="flex flex-1 justify-end gap-2">
           <Button asChild>
-            <Link href="/sign-in">Sign in</Link>
+            <Link href="#contact">Contact</Link>
           </Button>
           
           <Button 
