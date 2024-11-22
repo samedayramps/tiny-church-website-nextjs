@@ -15,6 +15,7 @@ const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().optional(),
+  church: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters'),
   interest: z.string().optional(),
   preferred_contact: z.enum(['email', 'phone']).optional(),
@@ -88,6 +89,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
     name: formData.get('name'),
     email: formData.get('email'),
     phone: formData.get('phone'),
+    church: formData.get('church'),
     message: formData.get('message'),
     interest: formData.get('interest'),
     preferred_contact: formData.get('preferred_contact'),
@@ -100,7 +102,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
     }
   }
 
-  const { name, email, phone, message, interest, preferred_contact, source } = validatedFields.data
+  const { name, email, phone, church, message, interest, preferred_contact, source } = validatedFields.data
 
   try {
     // Insert into Supabase
@@ -111,6 +113,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
           name,
           email,
           phone,
+          church,
           message,
           interest,
           source,
@@ -135,6 +138,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+        ${church ? `<p><strong>Church:</strong> ${church}</p>` : ''}
         ${interest ? `<p><strong>Interest:</strong> ${interest}</p>` : ''}
         ${preferred_contact ? `<p><strong>Preferred Contact:</strong> ${preferred_contact}</p>` : ''}
         <p><strong>Source:</strong> ${source}</p>

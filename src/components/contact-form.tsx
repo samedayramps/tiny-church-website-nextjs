@@ -11,6 +11,13 @@ import { trackEvent } from '@/lib/gtm'
 import { useSearchParams, usePathname } from 'next/navigation'
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 type State = {
   error?: string
@@ -96,33 +103,27 @@ function ContactFormContent() {
           />
         </div>
         <div className="space-y-2">
-          <select
-            name="interest"
-            className="w-full px-3 py-2 border rounded-md text-muted-foreground"
-            aria-label="Biggest Challenge"
-          >
-            <option value="">What&apos;s your biggest challenge?</option>
-            <option value="Outdated Website">Outdated or hard to update website</option>
-            <option value="Member Communication">Keeping in touch with members</option>
-            <option value="Tech Overwhelm">Too many complicated tech tools</option>
-            <option value="Limited Resources">Limited time and technical resources</option>
-            <option value="Other">Other challenge</option>
-          </select>
+          <Input
+            name="church"
+            placeholder="Church Name"
+            aria-label="Church Name"
+          />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label>Preferred Contact Method</Label>
-        <RadioGroup name="preferred_contact" className="flex gap-4">
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="email" id="email" />
-            <Label htmlFor="email">Email</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="phone" id="phone" />
-            <Label htmlFor="phone">Phone</Label>
-          </div>
-        </RadioGroup>
+        <Select name="interest">
+          <SelectTrigger aria-label="Biggest Challenge">
+            <SelectValue placeholder="What's your biggest challenge?" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Outdated Website">Outdated or hard to update website</SelectItem>
+            <SelectItem value="Member Communication">Keeping in touch with members</SelectItem>
+            <SelectItem value="Tech Overwhelm">Too many complicated tech tools</SelectItem>
+            <SelectItem value="Limited Resources">Limited time and technical resources</SelectItem>
+            <SelectItem value="Other">Other challenge</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">
@@ -135,7 +136,21 @@ function ContactFormContent() {
         />
       </div>
 
-      <div className="flex justify-end">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="space-y-2">
+          <Label className="text-sm text-muted-foreground">Preferred Contact Method</Label>
+          <RadioGroup name="preferred_contact" className="flex gap-4" defaultValue="email">
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="email" id="email" />
+              <Label htmlFor="email">Email</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="phone" id="phone" />
+              <Label htmlFor="phone">Phone</Label>
+            </div>
+          </RadioGroup>
+        </div>
+
         <LoadingButton type="submit" className="w-full sm:w-auto">
           Request Information
         </LoadingButton>
