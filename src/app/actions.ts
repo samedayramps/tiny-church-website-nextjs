@@ -14,7 +14,11 @@ const schema = z.object({
 const contactSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
+  phone: z.string().optional(),
   message: z.string().min(10, 'Message must be at least 10 characters'),
+  interest: z.string().optional(),
+  preferred_contact: z.enum(['email', 'phone']).optional(),
+  source: z.string(),
 })
 
 type State = {
@@ -83,7 +87,11 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
   const validatedFields = contactSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
+    phone: formData.get('phone'),
     message: formData.get('message'),
+    interest: formData.get('interest'),
+    preferred_contact: formData.get('preferred_contact'),
+    source: formData.get('source'),
   })
 
   if (!validatedFields.success) {
@@ -92,9 +100,32 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
     }
   }
 
-  const { name, email, message } = validatedFields.data
+  const { name, email, phone, message, interest, preferred_contact, source } = validatedFields.data
 
   try {
+    // Insert into Supabase
+    const { error: supabaseError } = await supabase
+      .from('lead_submissions')
+      .insert([
+        {
+          name,
+          email,
+          phone,
+          message,
+          interest,
+          source,
+          status: 'new',
+          utm_source: formData.get('utm_source') || null,
+          utm_medium: formData.get('utm_medium') || null,
+          utm_campaign: formData.get('utm_campaign') || null,
+          utm_term: formData.get('utm_term') || null,
+          utm_content: formData.get('utm_content') || null,
+        }
+      ])
+
+    if (supabaseError) throw supabaseError
+
+    // Send notification email with enhanced information
     await resend.emails.send({
       from: 'Tiny Church <hello@tinychurch.app>',
       to: 'hello@tinychurch.app',
@@ -103,6 +134,10 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
+        ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
+        ${interest ? `<p><strong>Interest:</strong> ${interest}</p>` : ''}
+        ${preferred_contact ? `<p><strong>Preferred Contact:</strong> ${preferred_contact}</p>` : ''}
+        <p><strong>Source:</strong> ${source}</p>
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `,
@@ -113,7 +148,7 @@ export async function sendContactForm(prevState: State | null, formData: FormDat
       success: "Thanks for reaching out! We'll get back to you soon.",
     }
   } catch (err) {
-    console.error('Failed to send contact form:', err)
+    console.error('Failed to process contact form:', err)
     return {
       error: 'Something went wrong. Please try again.',
     }

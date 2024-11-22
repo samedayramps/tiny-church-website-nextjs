@@ -5,7 +5,7 @@ import { Menu } from 'lucide-react'
 const navLinks = [
   { title: 'Features', href: '#features' },
   { title: 'Digital Presence', href: '#digital-presence' },
-  { title: 'Contact', href: '#contact' },
+  { title: 'Get Started', href: '#contact' },
 ]
 
 export function Navbar() {
@@ -40,7 +40,7 @@ export function Navbar() {
         {/* Right side - Actions */}
         <div className="flex flex-1 justify-end gap-2">
           <Button asChild>
-            <Link href="#contact">Contact</Link>
+            <Link href="#contact">Get Started</Link>
           </Button>
           
           <Button 
